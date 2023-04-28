@@ -12,7 +12,6 @@ import (
 
 var (
     evaluateRe = regexp.MustCompile(`^\/evaluate[\/]*$`)
-    testRe = regexp.MustCompile(`^\/test[\/]*$`)
 )
 
 type battleshipHandler struct{}
@@ -22,9 +21,6 @@ func (h *battleshipHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     switch {
         case r.Method == http.MethodPost && evaluateRe.MatchString(r.URL.Path):
             h.Evaluate(w, r)
-            return
-        case r.Method == http.MethodGet && testRe.MatchString(r.URL.Path):
-            h.Test(w, r)
             return
         default:
             notFound(w, r)
@@ -46,10 +42,6 @@ func (h *battleshipHandler) Evaluate(w http.ResponseWriter, r *http.Request) {
     }
     w.WriteHeader(http.StatusOK)
     w.Write(jsonBytes)
-}
-
-func (h *battleshipHandler) Test(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Test\n")
 }
 
 func internalServerError(w http.ResponseWriter, r *http.Request) {
@@ -74,7 +66,7 @@ func main() {
     mux := http.NewServeMux()
     handler := &battleshipHandler{}
     mux.Handle("/evaluate", handler)
-    mux.Handle("/test", handler)
+    mux.Handle("/", http.FileServer(http.Dir("./frontend")))
 
     fmt.Printf("Starting the Server at %s\n", addr + ":" + port)
     http.ListenAndServe(addr + ":" + port, mux)
