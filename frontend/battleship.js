@@ -18,16 +18,15 @@ class Battleship {
     async evaluate() {
         const evaluateResponse = await fetch(
             `https://battleship.lukeorth.com/evaluate`, {
-                Method: 'POST',
-                Headers: {
-                    Accept: 'application.json',
+                method: 'POST',
+                headers: {
                     'Content-Type': 'application/json'
                 },
-                Body: {
+                body: JSON.stringify({
                     "board": this.board,
                     "fleet": this.fleet
-                },
-                Cache: 'default'
+                }),
+                cache: 'default'
             }
         );
 
