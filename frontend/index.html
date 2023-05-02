@@ -5,11 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Battleship Solver</title>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <p>Battleship Solver</p> 
-    <script src="battleship.js"></script>
-    <script src="ui.js"></script>
-    <script src="app.js"></script>
+    <div class="container">
+        <div id="gameboard">
+        </div>
+        <div class="info">
+            <h3>Info</h3>
+            <p id="best-coord"></p>
+
+            <form id="toggle-display">
+                <p>Show:</p>
+                <input type="radio" id="scores" name="toggle" class="toggle" value="scores">
+                <label for="scores">Scores</label><br>
+                <input type="radio" id="percentages" name="toggle" class="toggle" value="percentages">
+                <label for="percentages">Percentages</label><br>
+                <input type="radio" id="none" name="toggle" class="toggle" value="none" checked>
+                <label for="none">None</label><br>
+            </form>
+
+            <button>Reset</button>
+        </div>
+        <div class="fleet">
+            <h3>Fleet</h3>
+            <div class="ship">
+                <p>Carrier</p>
+            </div>
+            <div class="ship">
+                <p>Battleship</p>
+            </div>
+            <div class="ship">
+                <p>Submarine</p>
+            </div>
+            <div class="ship">
+                <p>Cruiser</p>
+            </div>
+            <div class="ship">
+                <p>Destroyer</p>
+            </div>
+        </div>
+    </div>
+    <script src="scripts/solver.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/app.js"></script>
 </body>
 </html>
