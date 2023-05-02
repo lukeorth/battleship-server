@@ -71,6 +71,21 @@ html {
     cursor: pointer;
 }
 
+.cell > svg {
+    z-index: 1;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+}
+
+
+@media all and (max-width: 600px) {
+    .cell > svg {
+        width: 35px;
+        height: 35px;
+    }
+}
+
 .border-cell {
     background-color: #D3D3D3;
 }

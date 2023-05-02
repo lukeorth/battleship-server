@@ -1,6 +1,6 @@
 class UI {
     constructor() {
-        this.showScores = false;
+        this.showScores = true;
         this.showPercentages = false;
         this.bestCoord = document.getElementById("best-coord");
     }
@@ -32,16 +32,26 @@ class UI {
                 let score = solver.probabilities[row][col].score
                 let color = score > 0 ? this.getColor(score) : "#F5F5F5"
 
-                let style = `background:${color};`
                 if (row == solver.bestCell.coordinates[0] && col == solver.bestCell.coordinates[1]) {
-                    style += "border:#333333 solid 4px;"
-                }
-
-                output += `
-                    <div class="cell" data-row="${row}" data-col="${col}" data-coord="${letter}${col + 1}" style="${style}">
-                        ${this.getDisplayValue(row, col)}
+                    output += `
+                        <div class="cell" data-row="${row}" data-col="${col}" data-coord="${letter}${col + 1}" style="background:${color};">
+                            <svg class="evaluate" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                <path fill="currentColor" d="M7.5 0h1v4L8 6l-.5-2V0zm1 16h-1v-4l.5-2l.5 2v4zM16 7.5v1h-4L10 8l2-.5h4zm-16 1v-1h4L6 8l-2 .5H0z"/>
+                                <path fill="currentColor" d="M8 2.5a5.5 5.5 0 1 1 0 11A5.5 5.5 0 0 1 2.5 8a5.51 5.51 0 0 1 5.499-5.5zM8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1z"/>
+                            </svg>
+                            <span class="evaluate best-cell">
+                                ${this.getDisplayValue(row, col)}
+                            </span>
+                        </div>
+                    `;
+                } else {
+                    output += `<div class="cell" data-row="${row}" data-col="${col}" data-coord="${letter}${col + 1}" style="background:${color};">
+                        <span class="evaluate">
+                            ${this.getDisplayValue(row, col)}
+                        </span>
                     </div>
-                `;
+                    `;
+                }
             }
         }
         document.getElementById("gameboard").innerHTML = output;
@@ -63,6 +73,19 @@ class UI {
                 let row = e.target.dataset.row;
                 let col = e.target.dataset.col;
                 let coord = e.target.dataset.coord;
+
+                solver.miss(row, col, coord).then(data => {
+                    solver.updateState(data)
+                    this.showBoard();
+                    this.updateBestCoord();
+                });
+            }
+
+            if (e.target.matches(".evaluate")) {
+                console.log('hi');
+                let row = e.target.parentNode.dataset.row;
+                let col = e.target.parentNode.dataset.col;
+                let coord = e.target.parentNode.dataset.coord;
 
                 solver.miss(row, col, coord).then(data => {
                     solver.updateState(data)
