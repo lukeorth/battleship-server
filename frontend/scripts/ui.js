@@ -2,11 +2,30 @@ class UI {
     constructor() {
         this.showScores = true;
         this.showPercentages = false;
-        this.bestCoord = document.getElementById("best-coord");
+        this.targetRow = 0;
+        this.targetCol = 0;
+        this.targetCoord = "A1";
     }
 
     showBoard() {
-        let output = `
+        let infoOutput = `
+            <h3>Info</h3>
+
+            <p id="best-coord">${solver.bestCell.position}</p>
+
+            <p>Show:</p>
+            <input type="radio" id="scores" name="toggle-info" class="toggle-info" value="scores" ${this.showScores ? "checked" : ""}>
+            <label for="scores">Scores</label><br>
+            <input type="radio" id="percentages" name="toggle-info" class="toggle-info" value="percentages" ${this.showPercentages ? "checked" : ""}>
+            <label for="percentages">Percentages</label><br>
+            <input type="radio" id="none" name="toggle-info" class="toggle-info" value="none" ${!this.showScores && !this.showPercentages ? "checked" : ""}>
+            <label for="none">None</label><br>
+
+            <button id="reset">Reset</button>
+        `;
+        document.getElementById("info").innerHTML = infoOutput;
+
+        let boardOutput = `
             <div class="border-cell"></div>
             <div class="border-cell"><span class="label">1</span></div>
             <div class="border-cell"><span class="label">2</span></div>
@@ -23,7 +42,7 @@ class UI {
         for (let row = 0; row < solver.probabilities.length; row++) {
             let letter = String.fromCharCode(65 + row)
 
-            output += `
+            boardOutput += `
                 <div class="border-cell">
                     <span class="label">${letter}</span>
                 </div>
@@ -33,11 +52,10 @@ class UI {
                 let color = score > 0 ? this.getColor(score) : "#F5F5F5"
 
                 if (row == solver.bestCell.coordinates[0] && col == solver.bestCell.coordinates[1]) {
-                    output += `
+                    boardOutput += `
                         <div class="cell" data-row="${row}" data-col="${col}" data-coord="${letter}${col + 1}" style="background:${color};">
-                            <svg class="evaluate" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-                                <path fill="currentColor" d="M7.5 0h1v4L8 6l-.5-2V0zm1 16h-1v-4l.5-2l.5 2v4zM16 7.5v1h-4L10 8l2-.5h4zm-16 1v-1h4L6 8l-2 .5H0z"/>
-                                <path fill="currentColor" d="M8 2.5a5.5 5.5 0 1 1 0 11A5.5 5.5 0 0 1 2.5 8a5.51 5.51 0 0 1 5.499-5.5zM8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1z"/>
+                            <svg class="evaluate" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path class="evaluate" fill="currentColor" d="M3.05 13H1v-2h2.05C3.5 6.83 6.83 3.5 11 3.05V1h2v2.05c4.17.45 7.5 3.78 7.95 7.95H23v2h-2.05c-.45 4.17-3.78 7.5-7.95 7.95V23h-2v-2.05C6.83 20.5 3.5 17.17 3.05 13M12 5a7 7 0 0 0-7 7a7 7 0 0 0 7 7a7 7 0 0 0 7-7a7 7 0 0 0-7-7Z"/>
                             </svg>
                             <span class="evaluate best-cell">
                                 ${this.getDisplayValue(row, col)}
@@ -45,7 +63,7 @@ class UI {
                         </div>
                     `;
                 } else {
-                    output += `<div class="cell" data-row="${row}" data-col="${col}" data-coord="${letter}${col + 1}" style="background:${color};">
+                    boardOutput += `<div class="cell" data-row="${row}" data-col="${col}" data-coord="${letter}${col + 1}" style="background:${color};">
                         <span class="evaluate">
                             ${this.getDisplayValue(row, col)}
                         </span>
@@ -54,7 +72,42 @@ class UI {
                 }
             }
         }
-        document.getElementById("gameboard").innerHTML = output;
+        document.getElementById("gameboard").innerHTML = boardOutput;
+        
+        let overlayOutput = `
+        <div class="card">
+            <h3>${this.targetCoord}</h3>
+            <button id="miss">Miss</button>
+            <button id="hit">Hit</button>
+        </div>
+        `;
+        document.getElementById("gameboard-overlay").innerHTML = overlayOutput;
+
+        let fleetOutput = `
+            <h3>Fleet</h3>
+            <input type="checkbox" id="carrier" name="toggle-ship" class="toggle-ship" value="carrier" ${solver.fleet.find(ship => ship.name == "carrier") ? "checked" : ""}>
+            <label for="carrier">Carrier</label><br>
+            <input type="checkbox" id="battleship" name="toggle-ship" class="toggle-ship" value="battleship" ${solver.fleet.find(ship => ship.name == "battleship") ? "checked" : ""}>
+            <label for="battleship">Battleship</label><br>
+            <input type="checkbox" id="submarine" name="toggle-ship" class="toggle-ship" value="submarine" ${solver.fleet.find(ship => ship.name == "submarine") ? "checked" : ""}>
+            <label for="submarine">Submarine</label><br>
+            <input type="checkbox" id="cruiser" name="toggle-ship" class="toggle-ship" value="cruiser" ${solver.fleet.find(ship => ship.name == "cruiser") ? "checked" : ""}>
+            <label for="cruiser">Cruiser</label><br>
+            <input type="checkbox" id="destroyer" name="toggle-ship" class="toggle-ship" value="destroyer" ${solver.fleet.find(ship => ship.name == "destroyer") ? "checked" : ""}>
+            <label for="destroyer">Destroyer</label><br>
+        `;
+        document.getElementById("fleet").innerHTML = fleetOutput;
+    }
+
+    updateOverlay(coord) {
+        let overlayOutput = `
+        <div class="card">
+            <h3>${coord}</h3>
+            <button id="miss">Miss</button>
+            <button id="hit">Hit</button>
+        </div>
+        `;
+        document.getElementById("gameboard-overlay").innerHTML = overlayOutput;
     }
 
     getDisplayValue(row, col) {
@@ -67,34 +120,42 @@ class UI {
         }
     }
 
+    updateBoard(element) {
+        this.targetRow = element.closest(".cell").dataset.row;
+        this.targetCol = element.closest(".cell").dataset.col;
+        this.targetCoord = element.closest(".cell").dataset.coord;
+
+        this.updateOverlay(this.targetCoord);
+        document.getElementById("gameboard-overlay").style.display = "flex";
+    }
+
     attachListeners() {
         document.addEventListener("click", (e) => {
             if (e.target.matches(".cell")) {
-                let row = e.target.dataset.row;
-                let col = e.target.dataset.col;
-                let coord = e.target.dataset.coord;
-
-                solver.miss(row, col, coord).then(data => {
-                    solver.updateState(data)
-                    this.showBoard();
-                    this.updateBestCoord();
-                });
+                this.updateBoard(e.target);
             }
 
             if (e.target.matches(".evaluate")) {
-                console.log('hi');
-                let row = e.target.parentNode.dataset.row;
-                let col = e.target.parentNode.dataset.col;
-                let coord = e.target.parentNode.dataset.coord;
-
-                solver.miss(row, col, coord).then(data => {
-                    solver.updateState(data)
-                    this.showBoard();
-                    this.updateBestCoord();
-                });
+                this.updateBoard(e.target);
             }
 
-            if (e.target.matches(".toggle")) {
+            if (e.target.matches("#miss")) {
+                solver.miss(this.targetRow, this.targetCol, this.targetCoord).then(data => {
+                    solver.updateState(data);
+                    this.showBoard();
+                });
+                document.getElementById("gameboard-overlay").style.display = "none";
+            }
+
+            if (e.target.matches("#hit")) {
+                solver.hit(this.targetRow, this.targetCol, this.targetCoord).then(data => {
+                    solver.updateState(data);
+                    this.showBoard();
+                });
+                document.getElementById("gameboard-overlay").style.display = "none";
+            }
+
+            if (e.target.matches(".toggle-info")) {
                 this.showScores = false
                 this.showPercentages = false
 
@@ -109,6 +170,30 @@ class UI {
 
                 this.showBoard();
             }
+
+            if (e.target.matches(".toggle-ship")) {
+                let checkboxes = e.target.closest("#fleet").getElementsByTagName("input");
+                let fleet = []
+                for (let i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        fleet.push(solver.newShip(checkboxes[i].value));
+                    }
+                    solver.fleet = fleet;
+                }
+                solver.evaluate().then(data => {
+                    solver.updateState(data);
+                    this.showBoard();
+                })
+            }
+
+            if (e.target.matches("#reset")) {
+                solver = new Solver;
+                solver.evaluate().then(data => {
+                    solver.updateState(data);
+                    this.showBoard();
+                })
+            }
+
         })
     }
 
@@ -116,9 +201,5 @@ class UI {
         value = (value - solver.minScore) / (solver.maxScore - solver.minScore)
         let hue=((1-value)*120).toString(10);
         return ["hsl(",hue,",80%,70%)"].join("");
-    }
-
-    updateBestCoord() {
-        this.bestCoord.innerHTML = `Best: ${solver.bestCell.position}`;
     }
 }

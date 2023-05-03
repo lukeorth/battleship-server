@@ -9,41 +9,15 @@
 </head>
 <body>
     <div class="container">
-        <div id="gameboard">
+        <div class="grid-container">
+            <div id="gameboard">
+            </div>
+            <div id="gameboard-overlay">
+            </div>
         </div>
-        <div class="info">
-            <h3>Info</h3>
-            <p id="best-coord"></p>
-
-            <form id="toggle-display">
-                <p>Show:</p>
-                <input type="radio" id="scores" name="toggle" class="toggle" value="scores" checked>
-                <label for="scores">Scores</label><br>
-                <input type="radio" id="percentages" name="toggle" class="toggle" value="percentages">
-                <label for="percentages">Percentages</label><br>
-                <input type="radio" id="none" name="toggle" class="toggle" value="none">
-                <label for="none">None</label><br>
-            </form>
-
-            <button>Reset</button>
+        <div id="info">
         </div>
-        <div class="fleet">
-            <h3>Fleet</h3>
-            <div class="ship">
-                <p>Carrier</p>
-            </div>
-            <div class="ship">
-                <p>Battleship</p>
-            </div>
-            <div class="ship">
-                <p>Submarine</p>
-            </div>
-            <div class="ship">
-                <p>Cruiser</p>
-            </div>
-            <div class="ship">
-                <p>Destroyer</p>
-            </div>
+        <div id="fleet">
         </div>
     </div>
     <script src="scripts/solver.js"></script>

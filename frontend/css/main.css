@@ -20,23 +20,23 @@ html {
 }
 
 @media all and (min-width: 1100px) {
-    #gameboard {
+    .grid-container {
         flex: 3 0px;
         order: 2;
     }
-    .info { 
+    #info { 
         flex: 1 auto;
         padding: 10px;
         order: 1; 
     }
-    .fleet { 
+    #fleet { 
         flex: 1 auto;
         padding: 10px;
         order: 3; 
     }
 }
 
-#gameboard {
+.grid-container {
     flex: 3 100%;
     width: min(100vh, 100vw);
     height: min(100vh, 100vw);
@@ -46,6 +46,22 @@ html {
     margin-right: auto;
     
     display: grid;
+    grid-template-areas: "overlay";
+}
+
+#gameboard-overlay {
+    background-color: rgba(0,0,0,0.5);
+    grid-area: overlay;
+    
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+#gameboard {
+    display: grid;
+    grid-area: overlay;
     grid-template-columns: repeat(11, 1fr);
 }
 
@@ -69,20 +85,30 @@ html {
     justify-content: center;
     top: 50%;
     cursor: pointer;
+    color: #232323;
+}
+
+.cell:hover {
+    background-image: linear-gradient(rgb(0 0 0/20%) 0 0) !important;
 }
 
 .cell > svg {
     z-index: 1;
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
+    color: #383838;
     position: absolute;
 }
 
 
 @media all and (max-width: 600px) {
     .cell > svg {
-        width: 35px;
-        height: 35px;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .best-cell {
+        display: none;
     }
 }
 
@@ -95,6 +121,14 @@ html {
     font-size: 1.25em;
 }
 
-.fleet {
+#fleet {
     float: left;
+}
+
+.card {
+    max-width: 500px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
 }

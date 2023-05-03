@@ -3,11 +3,16 @@ const EMPTY = 1
 const HIT = 2
 const SUNK = 3
 
+const CARRIER_LENGTH = 5
+const BATTLESHIP_LENGTH = 4
+const CRUISER_LENGTH = 3
+const SUBMARINE_LENGTH = 3
+const DESTROYER_LENGTH = 2
+
 class Ship {
     constructor(name, size) {
         this.name = name;
         this.size = size;
-        this.sunk = false;
     }
 }
 
@@ -38,6 +43,21 @@ class Solver {
         this.hits = {}
         this.moves = {}
         this.bestCell = {};
+    }
+
+    newShip(shipName) {
+        switch (shipName) {
+            case "carrier":
+                return new Ship("carrier", CARRIER_LENGTH);
+            case "battleship":
+                return new Ship("battleship", BATTLESHIP_LENGTH);
+            case "cruiser":
+                return new Ship("cruiser", CRUISER_LENGTH);
+            case "submarine":
+                return new Ship("submarine", SUBMARINE_LENGTH);
+            case "destroyer":
+                return new Ship("destroyer", DESTROYER_LENGTH);
+        }
     }
 
     async evaluate() {
