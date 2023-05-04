@@ -80,8 +80,9 @@ class Solver {
         );
         
         try {
-            const evaluate = await res.json();
-            return evaluate
+            const data = await res.json();
+            this.updateState(data);
+            return data
         } catch (error) {
             return error;
         }

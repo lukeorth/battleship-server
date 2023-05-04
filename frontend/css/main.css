@@ -1,5 +1,7 @@
 html {
     box-sizing: border-box;
+    color: #EEEEEE;
+    background-color: #121212;
 }
 
 *,
@@ -50,6 +52,16 @@ html {
 }
 
 #gameboard-overlay {
+    background-color: rgba(0,0,0,0.5);
+    grid-area: overlay;
+    
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+#gameboard-load {
     background-color: rgba(0,0,0,0.5);
     grid-area: overlay;
     
@@ -126,9 +138,30 @@ html {
 }
 
 .card {
+    color: #232323;
     max-width: 500px;
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     padding: 20px;
+}
+
+.wheel {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

@@ -5,6 +5,7 @@ class UI {
         this.targetRow = 0;
         this.targetCol = 0;
         this.targetCoord = "A1";
+        this.loading = true;
     }
 
     showBoard() {
@@ -83,6 +84,13 @@ class UI {
         `;
         document.getElementById("gameboard-overlay").innerHTML = overlayOutput;
 
+        let loadingOutput = `
+        <div class="loading">
+            <span class="wheel"></span>
+        </div>
+        `;
+        document.getElementById("gameboard-load").innerHTML = loadingOutput;
+
         let fleetOutput = `
             <h3>Fleet</h3>
             <input type="checkbox" id="carrier" name="toggle-ship" class="toggle-ship" value="carrier" ${solver.fleet.find(ship => ship.name == "carrier") ? "checked" : ""}>
@@ -120,7 +128,7 @@ class UI {
         }
     }
 
-    updateBoard(element) {
+    showOverlay(element) {
         this.targetRow = element.closest(".cell").dataset.row;
         this.targetCol = element.closest(".cell").dataset.col;
         this.targetCoord = element.closest(".cell").dataset.coord;
@@ -129,27 +137,31 @@ class UI {
         document.getElementById("gameboard-overlay").style.display = "flex";
     }
 
+    showLoading() {
+        document.getElementById("gameboard-load").style.display = "flex";
+    }
+
     attachListeners() {
         document.addEventListener("click", (e) => {
             if (e.target.matches(".cell")) {
-                this.updateBoard(e.target);
+                this.showOverlay(e.target);
             }
 
             if (e.target.matches(".evaluate")) {
-                this.updateBoard(e.target);
+                this.showOverlay(e.target);
             }
 
             if (e.target.matches("#miss")) {
-                solver.miss(this.targetRow, this.targetCol, this.targetCoord).then(data => {
-                    solver.updateState(data);
+                this.showLoading();
+                solver.miss(this.targetRow, this.targetCol, this.targetCoord).then(() => {
                     this.showBoard();
                 });
+                document.getElementById("gameboard-load").style.display = "none";
                 document.getElementById("gameboard-overlay").style.display = "none";
             }
 
             if (e.target.matches("#hit")) {
-                solver.hit(this.targetRow, this.targetCol, this.targetCoord).then(data => {
-                    solver.updateState(data);
+                solver.hit(this.targetRow, this.targetCol, this.targetCoord).then(() => {
                     this.showBoard();
                 });
                 document.getElementById("gameboard-overlay").style.display = "none";
@@ -180,20 +192,17 @@ class UI {
                     }
                     solver.fleet = fleet;
                 }
-                solver.evaluate().then(data => {
-                    solver.updateState(data);
+                solver.evaluate().then(() => {
                     this.showBoard();
                 })
             }
 
             if (e.target.matches("#reset")) {
                 solver = new Solver;
-                solver.evaluate().then(data => {
-                    solver.updateState(data);
+                solver.evaluate().then(() => {
                     this.showBoard();
                 })
             }
-
         })
     }
 
