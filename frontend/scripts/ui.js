@@ -5,7 +5,6 @@ class UI {
         this.targetRow = 0;
         this.targetCol = 0;
         this.targetCoord = "A1";
-        this.loading = true;
     }
 
     showBoard() {
@@ -155,16 +154,16 @@ class UI {
                 this.showLoading();
                 solver.miss(this.targetRow, this.targetCol, this.targetCoord).then(() => {
                     this.showBoard();
+                    document.getElementById("gameboard-load").style.display = "none";
+                    document.getElementById("gameboard-overlay").style.display = "none";
                 });
-                document.getElementById("gameboard-load").style.display = "none";
-                document.getElementById("gameboard-overlay").style.display = "none";
             }
 
             if (e.target.matches("#hit")) {
                 solver.hit(this.targetRow, this.targetCol, this.targetCoord).then(() => {
                     this.showBoard();
+                    document.getElementById("gameboard-overlay").style.display = "none";
                 });
-                document.getElementById("gameboard-overlay").style.display = "none";
             }
 
             if (e.target.matches(".toggle-info")) {
