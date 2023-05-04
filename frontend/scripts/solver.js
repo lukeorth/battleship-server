@@ -124,13 +124,11 @@ class Solver {
         this.moves[coord] = [{cell: [row, col], old: this.board[row][col]}];
         this.hits[coord] = [col, row];
         this.board[row][col] = HIT;
-        return this.evaluate();
     }
 
     miss(row, col, coord) {
         this.moves[coord] = [{cell: [row, col], old: this.board[row][col]}];
         this.board[row][col] = MISS;
-        return this.evaluate();
     }
 
     #hitAndSunk(shipName, row, col, coord) {

@@ -7,7 +7,13 @@ class UI {
         this.targetCoord = "A1";
     }
 
-    showBoard() {
+    showUI() {
+        this.showInfo();
+        this.showBoard();
+        this.showFleet();
+    }
+
+    showInfo() {
         let infoOutput = `
             <h3>Info</h3>
 
@@ -24,7 +30,9 @@ class UI {
             <button id="reset">Reset</button>
         `;
         document.getElementById("info").innerHTML = infoOutput;
+    }
 
+    showBoard() {
         let boardOutput = `
             <div class="border-cell"></div>
             <div class="border-cell"><span class="label">1</span></div>
@@ -73,23 +81,39 @@ class UI {
             }
         }
         document.getElementById("gameboard").innerHTML = boardOutput;
-        
-        let overlayOutput = `
-        <div class="card">
-            <h3>${this.targetCoord}</h3>
-            <button id="miss">Miss</button>
-            <button id="hit">Hit</button>
-        </div>
-        `;
-        document.getElementById("gameboard-overlay").innerHTML = overlayOutput;
+    }
 
+    showOverlay() {
+        let overlayOutput = `
+            <div class="card">
+                <h3>${this.targetCoord}</h3>
+                <button id="miss">Miss</button>
+                <button id="hit">Hit</button>
+            </div>
+            `;
+        document.getElementById("gameboard-overlay").innerHTML = overlayOutput;
+        document.getElementById("gameboard-overlay").style.display = "flex";
+    }
+
+    hideOverlay() {
+        document.getElementById("gameboard-overlay").style.display = "none";
+    }
+    
+    showLoading() {
         let loadingOutput = `
         <div class="loading">
             <span class="wheel"></span>
         </div>
         `;
         document.getElementById("gameboard-load").innerHTML = loadingOutput;
+        document.getElementById("gameboard-load").style.display = "flex";
+    }
 
+    hideLoading() {
+        document.getElementById("gameboard-load").style.display = "none";
+    }
+
+    showFleet() {
         let fleetOutput = `
             <h3>Fleet</h3>
             <input type="checkbox" id="carrier" name="toggle-ship" class="toggle-ship" value="carrier" ${solver.fleet.find(ship => ship.name == "carrier") ? "checked" : ""}>
@@ -106,17 +130,6 @@ class UI {
         document.getElementById("fleet").innerHTML = fleetOutput;
     }
 
-    updateOverlay(coord) {
-        let overlayOutput = `
-        <div class="card">
-            <h3>${coord}</h3>
-            <button id="miss">Miss</button>
-            <button id="hit">Hit</button>
-        </div>
-        `;
-        document.getElementById("gameboard-overlay").innerHTML = overlayOutput;
-    }
-
     getDisplayValue(row, col) {
         if (this.showScores) {
             return solver.probabilities[row][col].score;
@@ -127,43 +140,35 @@ class UI {
         }
     }
 
-    showOverlay(element) {
-        this.targetRow = element.closest(".cell").dataset.row;
-        this.targetCol = element.closest(".cell").dataset.col;
-        this.targetCoord = element.closest(".cell").dataset.coord;
-
-        this.updateOverlay(this.targetCoord);
-        document.getElementById("gameboard-overlay").style.display = "flex";
-    }
-
-    showLoading() {
-        document.getElementById("gameboard-load").style.display = "flex";
+    evaluate() {
+        this.showLoading();
+        solver.evaluate().then(() => {
+            this.hideLoading();
+            this.showUI();
+        });
     }
 
     attachListeners() {
         document.addEventListener("click", (e) => {
-            if (e.target.matches(".cell")) {
-                this.showOverlay(e.target);
-            }
 
-            if (e.target.matches(".evaluate")) {
-                this.showOverlay(e.target);
+            if (e.target.matches(".cell") || e.target.matches(".evaluate")) {
+                this.targetRow = e.target.closest(".cell").dataset.row;
+                this.targetCol = e.target.closest(".cell").dataset.col;
+                this.targetCoord = e.target.closest(".cell").dataset.coord;
+
+                this.showOverlay();
             }
 
             if (e.target.matches("#miss")) {
-                this.showLoading();
-                solver.miss(this.targetRow, this.targetCol, this.targetCoord).then(() => {
-                    this.showBoard();
-                    document.getElementById("gameboard-load").style.display = "none";
-                    document.getElementById("gameboard-overlay").style.display = "none";
-                });
+                this.hideOverlay();
+                solver.miss(this.targetRow, this.targetCol, this.targetCoord)
+                this.evaluate();
             }
 
             if (e.target.matches("#hit")) {
-                solver.hit(this.targetRow, this.targetCol, this.targetCoord).then(() => {
-                    this.showBoard();
-                    document.getElementById("gameboard-overlay").style.display = "none";
-                });
+                this.hideOverlay();
+                solver.hit(this.targetRow, this.targetCol, this.targetCoord)
+                this.evaluate();
             }
 
             if (e.target.matches(".toggle-info")) {
@@ -179,7 +184,7 @@ class UI {
                         break;
                 }
 
-                this.showBoard();
+                this.showUI();
             }
 
             if (e.target.matches(".toggle-ship")) {
@@ -191,16 +196,12 @@ class UI {
                     }
                     solver.fleet = fleet;
                 }
-                solver.evaluate().then(() => {
-                    this.showBoard();
-                })
+                this.evaluate();
             }
 
             if (e.target.matches("#reset")) {
                 solver = new Solver;
-                solver.evaluate().then(() => {
-                    this.showBoard();
-                })
+                this.evaluate();
             }
         })
     }
