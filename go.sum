@@ -70,3 +70,17 @@ github.com/lukeorth/battleship-solver v0.0.0-20230517202944-d1c39e2bd22c h1:syoV
 github.com/lukeorth/battleship-solver v0.0.0-20230517202944-d1c39e2bd22c/go.mod h1:GTg/A33dIleoh+6ulI9/JcQ/9Vd+SYX07wHaBT/k1OM=
 github.com/lukeorth/battleship-solver v0.0.0-20230517203424-5ca12a17fe5b h1:ZYJbwHL+4s1Vi7jNstDflKPOA0ypVNOX8fzzIrl+KZg=
 github.com/lukeorth/battleship-solver v0.0.0-20230517203424-5ca12a17fe5b/go.mod h1:GTg/A33dIleoh+6ulI9/JcQ/9Vd+SYX07wHaBT/k1OM=
+github.com/lukeorth/battleship-solver v0.0.0-20230518153412-bd3881aa1b8b h1:LKS7/rfI2bdixzvTdVIS7wiPT26TL4/HNCv0uI4GQyE=
+github.com/lukeorth/battleship-solver v0.0.0-20230518153412-bd3881aa1b8b/go.mod h1:GTg/A33dIleoh+6ulI9/JcQ/9Vd+SYX07wHaBT/k1OM=
+github.com/lukeorth/battleship-solver v0.0.0-20230518154109-30f9ca0b34c4 h1:7DcDyorEASYztxPerBub24uA7RKO1nEjRhpNdgLaLWc=
+github.com/lukeorth/battleship-solver v0.0.0-20230518154109-30f9ca0b34c4/go.mod h1:GTg/A33dIleoh+6ulI9/JcQ/9Vd+SYX07wHaBT/k1OM=
+github.com/lukeorth/battleship-solver v0.0.0-20230518154341-b0e3f5eeb6af h1:RfhpE3ZGlgHSsB4CisU2gtf81xKaA2Q+Xb6reNEvjN0=
+github.com/lukeorth/battleship-solver v0.0.0-20230518154341-b0e3f5eeb6af/go.mod h1:GTg/A33dIleoh+6ulI9/JcQ/9Vd+SYX07wHaBT/k1OM=
+github.com/lukeorth/battleship-solver v0.0.0-20230518154530-1daedbfbcf4a h1:v+HGsHWk4lP1zi1C7N0waJ8g3QhbQTp5o2elx1LRJKE=
+github.com/lukeorth/battleship-solver v0.0.0-20230518154530-1daedbfbcf4a/go.mod h1:GTg/A33dIleoh+6ulI9/JcQ/9Vd+SYX07wHaBT/k1OM=
+github.com/lukeorth/battleship-solver v0.0.0-20230518154821-5acc7327d3de h1:JCunUm+DlfUzYY9S3MF75I3VchTFE5946xgqXIeZrAA=
+github.com/lukeorth/battleship-solver v0.0.0-20230518154821-5acc7327d3de/go.mod h1:GTg/A33dIleoh+6ulI9/JcQ/9Vd+SYX07wHaBT/k1OM=
+github.com/lukeorth/battleship-solver v0.0.0-20230518155013-e32216de94ef h1:jIJVq+rNsPgUbN7fwC6R8iNcejz7ENJ1W4S5zikPhKA=
+github.com/lukeorth/battleship-solver v0.0.0-20230518155013-e32216de94ef/go.mod h1:GTg/A33dIleoh+6ulI9/JcQ/9Vd+SYX07wHaBT/k1OM=
+github.com/lukeorth/battleship-solver v0.0.0-20230518155559-d68df1c45c6e h1:BlVYEBvEqcLCrQKJuRrk0NP3TY2LEfNGhN2pMgDnkgs=
+github.com/lukeorth/battleship-solver v0.0.0-20230518155559-d68df1c45c6e/go.mod h1:GTg/A33dIleoh+6ulI9/JcQ/9Vd+SYX07wHaBT/k1OM=

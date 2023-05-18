@@ -9,6 +9,22 @@
 </head>
 <body>
     <div class="container">
+        <div id="info">
+            <div class="container-card left-card">
+                <h3>Info</h3>
+
+                <p id="best-coord">Loading...</p>
+
+                <input type="radio" id="scores" name="toggle-info" class="toggle-info" value="scores" checked>
+                <label for="scores">Scores</label>
+                <input type="radio" id="percentages" name="toggle-info" class="toggle-info" value="percentages">
+                <label for="percentages">Percentages</label>
+                <input type="radio" id="none" name="toggle-info" class="toggle-info" value="none">
+                <label for="none">None</label>
+
+                <button id="reset">Reset</button>
+            </div>
+        </div>
         <div class="grid-container">
             <div id="gameboard">
                 <h3>Loading...</h3>
@@ -21,34 +37,21 @@
                 </div>
             </div>
         </div>
-        <div id="info">
-            <h3>Info</h3>
-
-            <p id="best-coord">Loading...</p>
-
-            <p>Show:</p>
-            <input type="radio" id="scores" name="toggle-info" class="toggle-info" value="scores" checked>
-            <label for="scores">Scores</label><br>
-            <input type="radio" id="percentages" name="toggle-info" class="toggle-info" value="percentages">
-            <label for="percentages">Percentages</label><br>
-            <input type="radio" id="none" name="toggle-info" class="toggle-info" value="none">
-            <label for="none">None</label><br>
-
-            <button id="reset">Reset</button>
-        </div>
         <div id="fleet">
-            <h3>Fleet</h3>
+            <div class="container-card right-card">
+                <h3>Fleet</h3>
 
-            <input type="checkbox" id="carrier" name="toggle-ship" class="toggle-ship" value="carrier" checked>
-            <label for="carrier">Carrier</label><br>
-            <input type="checkbox" id="battleship" name="toggle-ship" class="toggle-ship" value="battleship" checked>
-            <label for="battleship">Battleship</label><br>
-            <input type="checkbox" id="submarine" name="toggle-ship" class="toggle-ship" value="submarine" checked>
-            <label for="submarine">Submarine</label><br>
-            <input type="checkbox" id="cruiser" name="toggle-ship" class="toggle-ship" value="cruiser" checked>
-            <label for="cruiser">Cruiser</label><br>
-            <input type="checkbox" id="destroyer" name="toggle-ship" class="toggle-ship" value="destroyer" checked>
-            <label for="destroyer">Destroyer</label><br>
+                <input type="checkbox" id="carrier" name="toggle-ship" class="toggle-ship" value="carrier" checked>
+                <label for="carrier">Carrier</label>
+                <input type="checkbox" id="battleship" name="toggle-ship" class="toggle-ship" value="battleship" checked>
+                <label for="battleship">Battleship</label>
+                <input type="checkbox" id="submarine" name="toggle-ship" class="toggle-ship" value="submarine" checked>
+                <label for="submarine">Submarine</label>
+                <input type="checkbox" id="cruiser" name="toggle-ship" class="toggle-ship" value="cruiser" checked>
+                <label for="cruiser">Cruiser</label>
+                <input type="checkbox" id="destroyer" name="toggle-ship" class="toggle-ship" value="destroyer" checked>
+                <label for="destroyer">Destroyer</label>
+            </div>
         </div>
     </div>
     <script src="scripts/solver.js"></script>

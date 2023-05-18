@@ -1,4 +1,5 @@
 html {
+    font-family: helvetica;
     box-sizing: border-box;
     color: #EEEEEE;
     background-color: #121212;
@@ -18,7 +19,60 @@ html {
 }
 
 .container > * {
-  flex: 1 100%;
+    text-align: center;
+    flex: 1 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+.container-card {
+    width: 400px;
+    padding: 15px;
+    background-color: #474747;
+    border-radius: 5px;
+}
+
+.container-card input {
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.container-card label, button {
+    display: block;
+    width: 50%;
+    margin: 5px auto;
+    background-color: #B1B1B1;
+    padding: 8px 20px;
+    font-family: sans-serif, Arial;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 2px solid #B1B1B1;
+    color: #121212;
+}
+
+.container-card input[type="radio"]:checked + label {
+    background-color:#6699CC;
+    border: 2px solid #b3cee5;
+}
+
+.container-card input[type="checkbox"]:checked + label {
+    background-color:#6699CC;
+    border: 2px solid #b3cee5;
+}
+
+.container-card label:hover, button:hover {
+    background-color: #b3cee5;
+    cursor: pointer;
+}
+
+.left-card {
+    float: right;
+}
+
+.right-card {
+    float: left;
 }
 
 @media all and (min-width: 1100px) {
@@ -28,12 +82,10 @@ html {
     }
     #info { 
         flex: 1 auto;
-        padding: 10px;
         order: 1; 
     }
     #fleet { 
         flex: 1 auto;
-        padding: 10px;
         order: 3; 
     }
 }
@@ -106,21 +158,57 @@ html {
 
 .cell > svg {
     z-index: 1;
+    width: 30px;
+    height: 30px;
+    color: #DC143C;
+    position: absolute;
+}
+
+.cell > svg.miss {
+    color: #808080;
+}
+
+.cell > svg.target {
+    z-index: 1;
     width: 55px;
     height: 55px;
     color: #383838;
     position: absolute;
 }
 
+input[type=checkbox]:not(:checked) + label {
+  color:red;
+  text-decoration: line-through;
+}
 
 @media all and (max-width: 600px) {
     .cell > svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .cell > svg.target {
         width: 30px;
         height: 30px;
+    }
+
+    .modal-btn {
+        padding: 3px;
+        font-size: 5px;
+        width: 100px;
+        height: 15px;
+        margin: 5px auto;
     }
     
     .best-cell {
         display: none;
+    }
+
+    .left-card,
+    .right-card {
+        width: 100%;
+        float: none;
+        margin: auto;
     }
 }
 
@@ -141,10 +229,14 @@ html {
     display: none;
 }
 
+.inner-card {
+    text-align: center;
+    padding: 15px;
+}
+
 .card {
     color: #232323;
-    max-width: 500px;
-    background-color: white;
+    background-color: #EEEEEE;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     padding: 20px;
@@ -159,6 +251,40 @@ html {
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
+}
+
+#close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.sink-ship {
+    background-color: #808080 !important;
+}
+
+.modal-btn {
+    background-color: #6699CC; /* Green */
+    border: 2px solid #b3cee5;
+    color: white;
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 15px;
+    border-radius: 5px;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+    margin: 7px auto;
+}
+
+#close:hover,
+#close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 @keyframes rotation {

@@ -46,10 +46,7 @@ class Solver {
         this.probabilities = [];
         this.minScore = 0;
         this.maxScore = 0;
-        this.hits = {}
-        this.moves = {}
         this.bestCell = {};
-        this.sunk = {};
     }
 
     newShip(shipName) {
@@ -127,20 +124,36 @@ class Solver {
         this.bestCell = data.bestCell
     }
 
-    hit(row, col, coord) {
-        this.moves[coord] = [{cell: [row, col], old: this.board[row][col]}];
-        this.hits[coord] = [col, row];
+    hit(row, col) {
         this.board[row][col] = HIT;
     }
 
-    miss(row, col, coord) {
-        this.moves[coord] = [{cell: [row, col], old: this.board[row][col]}];
+    miss(row, col) {
         this.board[row][col] = MISS;
     }
 
-    hitAndSunk(shipName, row, col, coord) {
-        this.moves[coord] = [{cell: [row, col], old: this.board[col][row]}];
+    clear(row, col) {
+        switch (this.board[row][col]) {
+            case CARRIER:
+                this.fleet.push(this.newShip("carrier"))
+                break;
+            case BATTLESHIP:
+                this.fleet.push(this.newShip("battleship"))
+                break;
+            case SUBMARINE:
+                this.fleet.push(this.newShip("submarine"))
+                break;
+            case CRUISER:
+                this.fleet.push(this.newShip("cruiser"))
+                break;
+            case DESTROYER:
+                this.fleet.push(this.newShip("destroyer"))
+                break;
+        }
+        this.board[row][col] = EMPTY;
+    }
 
+    hitAndSunk(shipName, row, col) {
         let ship = this.fleet.find(x => x.name == shipName);
         this.board[row][col] = ship.id;
         this.fleet = this.fleet.filter(s => {
