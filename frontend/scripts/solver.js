@@ -1,6 +1,11 @@
+const EMPTY = -1
 const MISS = 0
-const EMPTY = 1
-const HIT = 2
+const CARRIER = 1
+const BATTLESHIP = 2
+const SUBMARINE = 3
+const CRUISER = 4
+const DESTROYER = 5
+const HIT = 6
 const SUNK = 3
 
 const CARRIER_LENGTH = 5
@@ -10,7 +15,8 @@ const SUBMARINE_LENGTH = 3
 const DESTROYER_LENGTH = 2
 
 class Ship {
-    constructor(name, size) {
+    constructor(id, name, size) {
+        this.id = id;
         this.name = name;
         this.size = size;
     }
@@ -31,11 +37,11 @@ class Solver {
             [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]
         ]
         this.fleet = [
-            new Ship("carrier", 5),
-            new Ship("battleship", 4),
-            new Ship("cruiser", 3),
-            new Ship("submarine", 3),
-            new Ship("destroyer", 2)
+            new Ship(CARRIER, "carrier", 5),
+            new Ship(BATTLESHIP, "battleship", 4),
+            new Ship(SUBMARINE, "submarine", 3),
+            new Ship(CRUISER, "cruiser", 3),
+            new Ship(DESTROYER, "destroyer", 2)
         ]
         this.probabilities = [];
         this.minScore = 0;
@@ -43,20 +49,21 @@ class Solver {
         this.hits = {}
         this.moves = {}
         this.bestCell = {};
+        this.sunk = {};
     }
 
     newShip(shipName) {
         switch (shipName) {
             case "carrier":
-                return new Ship("carrier", CARRIER_LENGTH);
+                return new Ship(CARRIER, "carrier", CARRIER_LENGTH);
             case "battleship":
-                return new Ship("battleship", BATTLESHIP_LENGTH);
-            case "cruiser":
-                return new Ship("cruiser", CRUISER_LENGTH);
+                return new Ship(BATTLESHIP, "battleship", BATTLESHIP_LENGTH);
             case "submarine":
-                return new Ship("submarine", SUBMARINE_LENGTH);
+                return new Ship(SUBMARINE, "submarine", SUBMARINE_LENGTH);
+            case "cruiser":
+                return new Ship(CRUISER, "cruiser", CRUISER_LENGTH);
             case "destroyer":
-                return new Ship("destroyer", DESTROYER_LENGTH);
+                return new Ship(DESTROYER, "destroyer", DESTROYER_LENGTH);
         }
     }
 
@@ -131,17 +138,13 @@ class Solver {
         this.board[row][col] = MISS;
     }
 
-    #hitAndSunk(shipName, row, col, coord) {
+    hitAndSunk(shipName, row, col, coord) {
         this.moves[coord] = [{cell: [row, col], old: this.board[col][row]}];
-        this.board[col][row] = SUNK;
-    }
-    
-    #getShipByName(ship) {
-        for (let i = 0; i < this.fleet.length; i++) {
-            if (this.fleet[i].name == ship) {
-                return fleet[i]
-            }
-        }
-        return null
+
+        let ship = this.fleet.find(x => x.name == shipName);
+        this.board[row][col] = ship.id;
+        this.fleet = this.fleet.filter(s => {
+            return s != ship;
+        });
     }
 }

@@ -137,6 +137,10 @@ html {
     float: left;
 }
 
+#target-ships {
+    display: none;
+}
+
 .card {
     color: #232323;
     max-width: 500px;

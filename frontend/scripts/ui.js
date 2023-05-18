@@ -57,7 +57,7 @@ class UI {
             `;
             for (let col = 0; col < solver.probabilities[row].length; col++) {
                 let score = solver.probabilities[row][col].score
-                let color = score > 0 ? this.getColor(score) : "#F5F5F5"
+                let color = score > 0 ? this.#getColor(score) : "#F5F5F5"
 
                 if (row == solver.bestCell.coordinates[0] && col == solver.bestCell.coordinates[1]) {
                     boardOutput += `
@@ -89,6 +89,9 @@ class UI {
                 <h3>${this.targetCoord}</h3>
                 <button id="miss">Miss</button>
                 <button id="hit">Hit</button>
+                <button id="sunk">Sunk</button>
+                <div id="target-ships">
+                </div>
             </div>
             `;
         document.getElementById("gameboard-overlay").innerHTML = overlayOutput;
@@ -96,9 +99,21 @@ class UI {
     }
 
     hideOverlay() {
+        document.getElementById("target-ships").style.display = "none";
         document.getElementById("gameboard-overlay").style.display = "none";
     }
-    
+
+    showTargetShips() {
+        let targetShipsOutput = ""
+
+        for (let i = 0; i < solver.fleet.length; i++) {
+            targetShipsOutput += `<button class="sink-ship" value="${solver.fleet[i].name}">${solver.fleet[i].name}</button>`
+        }
+
+        document.getElementById("target-ships").innerHTML = targetShipsOutput;
+        document.getElementById("target-ships").style.display = "block";
+    }
+
     showLoading() {
         let loadingOutput = `
         <div class="loading">
@@ -150,63 +165,96 @@ class UI {
 
     attachListeners() {
         document.addEventListener("click", (e) => {
+            switch (true) {
+                case e.target.matches(".cell"):
+                case e.target.matches(".evaluate"):
+                    this.targetRow = e.target.closest(".cell").dataset.row;
+                    this.targetCol = e.target.closest(".cell").dataset.col;
+                    this.targetCoord = e.target.closest(".cell").dataset.coord;
 
-            if (e.target.matches(".cell") || e.target.matches(".evaluate")) {
-                this.targetRow = e.target.closest(".cell").dataset.row;
-                this.targetCol = e.target.closest(".cell").dataset.col;
-                this.targetCoord = e.target.closest(".cell").dataset.coord;
+                    this.showOverlay();
+                    break;
 
-                this.showOverlay();
-            }
+                case e.target.matches("#miss"):
+                    this.hideOverlay();
+                    solver.miss(Number(this.targetRow), Number(this.targetCol), this.targetCoord)
+                    this.evaluate();
+                    break;
 
-            if (e.target.matches("#miss")) {
-                this.hideOverlay();
-                solver.miss(this.targetRow, this.targetCol, this.targetCoord)
-                this.evaluate();
-            }
+                case e.target.matches("#hit"):
+                    this.hideOverlay();
+                    solver.hit(Number(this.targetRow), Number(this.targetCol), this.targetCoord)
+                    this.evaluate();
+                    break;
 
-            if (e.target.matches("#hit")) {
-                this.hideOverlay();
-                solver.hit(this.targetRow, this.targetCol, this.targetCoord)
-                this.evaluate();
-            }
+                case e.target.matches("#sunk"):
+                    this.showTargetShips();
+                    break;
 
-            if (e.target.matches(".toggle-info")) {
-                this.showScores = false
-                this.showPercentages = false
+                case e.target.matches(".sink-ship"):
+                    this.hideOverlay();
+                    solver.hitAndSunk(e.target.value, Number(this.targetRow), Number(this.targetCol), this.targetCoord)
+                    this.evaluate();
+                    break;
 
-                switch (e.target.value) {
-                    case "scores":
-                        this.showScores = true;
-                        break;
-                    case "percentages":
-                        this.showPercentages = true;
-                        break;
-                }
+                case e.target.matches(".toggle-info"):
+                    this.showScores = false
+                    this.showPercentages = false
 
-                this.showUI();
-            }
-
-            if (e.target.matches(".toggle-ship")) {
-                let checkboxes = e.target.closest("#fleet").getElementsByTagName("input");
-                let fleet = []
-                for (let i = 0; i < checkboxes.length; i++) {
-                    if (checkboxes[i].checked) {
-                        fleet.push(solver.newShip(checkboxes[i].value));
+                    switch (e.target.value) {
+                        case "scores":
+                            this.showScores = true;
+                            break;
+                        case "percentages":
+                            this.showPercentages = true;
+                            break;
                     }
-                    solver.fleet = fleet;
-                }
-                this.evaluate();
-            }
+                    this.showUI();
+                    break;
 
-            if (e.target.matches("#reset")) {
-                solver = new Solver;
-                this.evaluate();
+                case e.target.matches(".toggle-ship"):
+                    let checkbox = e.target;
+                    let checkboxes = e.target.closest("#fleet").getElementsByTagName("input");
+                    let fleet = []
+                    for (let i = 0; i < checkboxes.length; i++) {
+                        if (checkboxes[i].checked) {
+                            fleet.push(solver.newShip(checkboxes[i].value));
+                            /*
+                            for (let row = 0; row < solver.board.length; row++) {
+                                for (let col = 0; col < solver.board.length; col++) {
+                                    if (solver.board[row][col] == ship.id) {
+                                        solver.board[row][col] == EMPTY;
+                                        continue;
+                                    }
+                                }
+                            }
+                            */
+                        }
+                        solver.fleet = fleet;
+                    }
+                    let ship = solver.fleet.find(ship => ship.name == checkbox.value)
+                    if (ship) {
+                        for (let row = 0; row < solver.board.length; row++) {
+                            for (let col = 0; col < solver.board.length; col++) {
+                                if (solver.board[row][col] == ship.id) {
+                                    solver.board[row][col] = EMPTY;
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    this.evaluate();
+                    break;
+
+                case e.target.matches("#reset"):
+                    solver = new Solver;
+                    this.evaluate();
+                    break;
             }
         })
     }
 
-    getColor(value) {
+    #getColor(value) {
         value = (value - solver.minScore) / (solver.maxScore - solver.minScore)
         let hue=((1-value)*120).toString(10);
         return ["hsl(",hue,",80%,70%)"].join("");
