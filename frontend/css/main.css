@@ -1,3 +1,17 @@
+:root {
+    --border-cell-color: #B1B1B1;
+    --border-cell-text-color: #232323;
+    --cell-text-color: #232323;
+    --cell-border-color: #000000;
+    --target-crosshairs-color: #383838;
+}
+
+[data-theme="gray-scale"] {
+    --border-cell-color: #6F8FAF;
+    --cell-text-color: #ffffff;
+    --target-crosshairs-color: #FFFFFF;
+}
+
 html {
     font-family: helvetica;
     box-sizing: border-box;
@@ -149,13 +163,14 @@ html {
 #gameboard > div {
     line-height: 0;
     text-align: center;
-    border: 1px solid white;
+    border: 1px solid var(--cell-border-color);
 }
 
 .border-cell {
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--border-cell-text-color) !important;
     top: 50%;
 }
 
@@ -166,7 +181,7 @@ html {
     justify-content: center;
     top: 50%;
     cursor: pointer;
-    color: #232323;
+    color: var(--cell-text-color);
 }
 
 .cell:hover {
@@ -189,7 +204,7 @@ html {
     z-index: 1;
     width: 55px;
     height: 55px;
-    color: #383838;
+    color: var(--target-crosshairs-color);
     position: absolute;
 }
 
@@ -234,7 +249,7 @@ input[type=checkbox]:not(:checked) + label {
 }
 
 .border-cell {
-    background-color: #D3D3D3;
+    background-color: var(--border-cell-color);
 }
 
 .label {
@@ -283,13 +298,12 @@ input[type=checkbox]:not(:checked) + label {
 }
 
 .sink-ship {
-    background-color: #808080 !important;
+    background-color: #B1B1B1 !important;
 }
 
 .modal-btn {
     background-color: #6699CC; /* Green */
-    border: 2px solid #b3cee5;
-    color: white;
+    border: 2px solid #474747;
     padding: 8px;
     text-align: center;
     text-decoration: none;
@@ -300,10 +314,6 @@ input[type=checkbox]:not(:checked) + label {
     height: 40px;
     cursor: pointer;
     margin: 7px auto;
-}
-
-.sink-ship {
-    border: 2px solid #B1B1B1;
 }
 
 #close:hover,

@@ -1,7 +1,8 @@
 class UI {
     constructor() {
-        this.showScores = true;
+        this.showScores = false;
         this.showPercentages = false;
+        this.grayScale = false;
         this.targetRow = 0;
         this.targetCol = 0;
         this.targetCoord = "A1";
@@ -17,15 +18,18 @@ class UI {
     showInfo() {
         let infoOutput = `
             <div class="container-card left-card">
-                <h3>Info</h3>
+                <h3>Display Options</h3>
 
-                <input type="radio" id="scores" name="toggle-info" class="toggle-info" value="scores" ${this.showScores ? "checked" : ""}>
-                <label for="scores">Scores</label>
-                <input type="radio" id="percentages" name="toggle-info" class="toggle-info" value="percentages" ${this.showPercentages ? "checked" : ""}>
-                <label for="percentages">Percentages</label>
                 <input type="radio" id="none" name="toggle-info" class="toggle-info" value="none" ${!this.showScores && !this.showPercentages ? "checked" : ""}>
-                <label for="none">None</label>
-                <button id="reset">Reset Board</button><br>
+                <label for="none">Blank</label>
+                <input type="radio" id="scores" name="toggle-info" class="toggle-info" value="scores" ${this.showScores ? "checked" : ""}>
+                <label for="scores">Weights</label>
+                <input type="radio" id="percentages" name="toggle-info" class="toggle-info" value="percentages" ${this.showPercentages ? "checked" : ""}>
+                <label for="percentages">Percentages</label><br>
+                <input type="radio" id="color" name="toggle-color" class="toggle-color" value="color" ${!this.grayScale ? "checked" : ""}>
+                <label for="color">Color Mode</label>
+                <input type="radio" id="grayscale" name="toggle-color" class="toggle-color" value="grayscale" ${this.grayScale ? "checked" : ""}>
+                <label for="grayscale">Grayscale Mode</label><br>
 
                 <p id="best-coord">Best Square: ${solver.bestCell.position}</p>
                 ${solver.errors != null ? `<p id="errors">${solver.errors.join("<br>")}</p>` : ""}
@@ -60,7 +64,7 @@ class UI {
             for (let col = 0; col < solver.probabilities[row].length; col++) {
                 let score = solver.probabilities[row][col].score
                 let boardVal = solver.board[row][col];
-                let color = score > 0 ? this.#getColor(score) : "#F5F5F5"
+                let color = score > 0 ? this.#getColor(score, this.grayScale) : "#F5F5F5"
 
                 if (boardVal == 0) {
                     boardOutput += `
@@ -179,7 +183,9 @@ class UI {
                 <input type="checkbox" id="cruiser" name="toggle-ship" class="toggle-ship" value="cruiser" ${solver.fleet.find(ship => ship.name == "cruiser") ? "checked" : ""}>
                 <label for="cruiser">Cruiser</label>
                 <input type="checkbox" id="destroyer" name="toggle-ship" class="toggle-ship" value="destroyer" ${solver.fleet.find(ship => ship.name == "destroyer") ? "checked" : ""}>
-                <label for="destroyer">Destroyer</label>
+                <label for="destroyer">Destroyer</label><br>
+                
+                <button id="reset">Reset</button>
             </div>
         `;
         document.getElementById("fleet").innerHTML = fleetOutput;
@@ -263,6 +269,17 @@ class UI {
                     this.showUI();
                     break;
 
+                case e.target.matches(".toggle-color"):
+                    this.grayScale = false
+                    document.documentElement.setAttribute("data-theme", "color");
+
+                    if (e.target.value == "grayscale") {
+                        this.grayScale = true
+                        document.documentElement.setAttribute("data-theme", "gray-scale");
+                    }
+                    this.showUI();
+                    break;
+
                 case e.target.matches(".toggle-ship"):
                     let checkbox = e.target;
                     let checkboxes = e.target.closest("#fleet").getElementsByTagName("input");
@@ -295,9 +312,13 @@ class UI {
         })
     }
 
-    #getColor(value) {
+    #getColor(value, grayScale) {
         value = (value - solver.minScore) / (solver.maxScore - solver.minScore)
-        let hue=((1-value)*120).toString(10);
+        let hue = ((1 - value) * 120).toString(10);
+        let lightness = (1 - (0.7 * value)) * 100  - 20 + "%"
+        if (grayScale) {
+            return ["hsl(0,0%,",lightness,")"].join("");
+        }
         return ["hsl(",hue,",80%,70%)"].join("");
     }
 }
