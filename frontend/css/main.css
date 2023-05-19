@@ -9,7 +9,7 @@
 [data-theme="gray-scale"] {
     --border-cell-color: #6F8FAF;
     --cell-text-color: #ffffff;
-    --target-crosshairs-color: #FFFFFF;
+    --target-crosshairs-color: #D3D3D3;
 }
 
 html {
@@ -62,7 +62,7 @@ html {
     font-family: sans-serif, Arial;
     font-size: 16px;
     border-radius: 4px;
-    border: 2px solid #B1B1B1;
+    border: 2px solid #474747;
     color: #121212;
 }
 
@@ -272,7 +272,7 @@ input[type=checkbox]:not(:checked) + label {
 
 .card {
     color: #232323;
-    background-color: #EEEEEE;
+    background-color: #E0E0E0;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     padding: 10px;
@@ -291,7 +291,7 @@ input[type=checkbox]:not(:checked) + label {
 }
 
 #close {
-    color: #aaaaaa;
+    color: #474747;
     margin-left: 80%;
     font-size: 35px;
     font-weight: bold;
