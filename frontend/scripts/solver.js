@@ -47,6 +47,7 @@ class Solver {
         this.minScore = 0;
         this.maxScore = 0;
         this.bestCell = {};
+        this.errors = [];
     }
 
     newShip(shipName) {
@@ -118,10 +119,11 @@ class Solver {
             probabilities.push(newRow);
         }
 
-        this.probabilities = probabilities
-        this.minScore = minScore
-        this.maxScore = maxScore
-        this.bestCell = data.bestCell
+        this.probabilities = probabilities;
+        this.minScore = minScore;
+        this.maxScore = maxScore;
+        this.bestCell = data.bestCell;
+        this.errors = data.errors;
     }
 
     hit(row, col) {

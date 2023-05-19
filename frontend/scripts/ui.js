@@ -19,16 +19,16 @@ class UI {
             <div class="container-card left-card">
                 <h3>Info</h3>
 
-                <p id="best-coord">Best Square: ${solver.bestCell.position}</p>
-
                 <input type="radio" id="scores" name="toggle-info" class="toggle-info" value="scores" ${this.showScores ? "checked" : ""}>
                 <label for="scores">Scores</label>
                 <input type="radio" id="percentages" name="toggle-info" class="toggle-info" value="percentages" ${this.showPercentages ? "checked" : ""}>
                 <label for="percentages">Percentages</label>
                 <input type="radio" id="none" name="toggle-info" class="toggle-info" value="none" ${!this.showScores && !this.showPercentages ? "checked" : ""}>
                 <label for="none">None</label>
+                <button id="reset">Reset Board</button><br>
 
-                <button id="reset">Reset</button>
+                <p id="best-coord">Best Square: ${solver.bestCell.position}</p>
+                ${solver.errors != null ? `<p id="errors">${solver.errors.join("<br>")}</p>` : ""}
             </div>
         `;
         document.getElementById("info").innerHTML = infoOutput;
