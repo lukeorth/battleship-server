@@ -2,7 +2,7 @@ class UI {
     constructor() {
         this.showScores = false;
         this.showPercentages = false;
-        this.grayScale = false;
+        this.colorMode = false;
         this.targetRow = 0;
         this.targetCol = 0;
         this.targetCoord = "A1";
@@ -26,12 +26,16 @@ class UI {
                 <label for="scores">Weights</label>
                 <input type="radio" id="percentages" name="toggle-info" class="toggle-info" value="percentages" ${this.showPercentages ? "checked" : ""}>
                 <label for="percentages">Percentages</label><br>
-                <input type="radio" id="color" name="toggle-color" class="toggle-color" value="color" ${!this.grayScale ? "checked" : ""}>
-                <label for="color">Color Mode</label>
-                <input type="radio" id="grayscale" name="toggle-color" class="toggle-color" value="grayscale" ${this.grayScale ? "checked" : ""}>
-                <label for="grayscale">Grayscale Mode</label><br>
-
-                <p id="best-coord">Best Square: ${solver.bestCell.position}</p>
+                <input type="radio" id="grayscale" name="toggle-color" class="toggle-color" value="grayscale" ${!this.colorMode ? "checked" : ""}>
+                <label for="grayscale">Grayscale</label>
+                <input type="radio" id="color" name="toggle-color" class="toggle-color" value="color" ${this.colorMode ? "checked" : ""}>
+                <label for="color">Color Mode</label><br>
+               
+                <div class="stats">
+                    <p id="best-coord">Best Square:</p><span>${solver.bestCell.position}</span>
+                    <p>Weight:</p><span>${solver.bestCell.weight}</span>
+                    <p>Percent:</p><span>${solver.bestCell.percent}%</span>
+                </div>
                 ${solver.errors != null ? `<p id="errors">${solver.errors.join("<br>")}</p>` : ""}
             </div>
         `;
@@ -64,7 +68,7 @@ class UI {
             for (let col = 0; col < solver.probabilities[row].length; col++) {
                 let score = solver.probabilities[row][col].score
                 let boardVal = solver.board[row][col];
-                let color = score > 0 ? this.#getColor(score, this.grayScale) : "#F5F5F5"
+                let color = score > 0 ? this.#getColor(score, this.colorMode) : "#F5F5F5"
 
                 if (boardVal == 0) {
                     boardOutput += `
@@ -270,12 +274,12 @@ class UI {
                     break;
 
                 case e.target.matches(".toggle-color"):
-                    this.grayScale = false
-                    document.documentElement.setAttribute("data-theme", "color");
+                    this.colorMode = false
+                    document.documentElement.setAttribute("data-theme", "gray-scale");
 
-                    if (e.target.value == "grayscale") {
-                        this.grayScale = true
-                        document.documentElement.setAttribute("data-theme", "gray-scale");
+                    if (e.target.value == "color") {
+                        this.colorMode = true
+                        document.documentElement.setAttribute("data-theme", "color");
                     }
                     this.showUI();
                     break;
@@ -312,13 +316,13 @@ class UI {
         })
     }
 
-    #getColor(value, grayScale) {
+    #getColor(value, colorMode) {
         value = (value - solver.minScore) / (solver.maxScore - solver.minScore)
-        let hue = ((1 - value) * 120).toString(10);
-        let lightness = (1 - (0.7 * value)) * 100  - 20 + "%"
-        if (grayScale) {
-            return ["hsl(0,0%,",lightness,")"].join("");
+        if (colorMode) {
+            let hue = ((1 - value) * 120).toString(10);
+            return ["hsl(",hue,",80%,65%)"].join("");
         }
-        return ["hsl(",hue,",80%,70%)"].join("");
+        let lightness = (1 - (0.7 * value)) * 100  - 20 + "%"
+        return ["hsl(0,0%,",lightness,")"].join("");
     }
 }

@@ -107,12 +107,19 @@ class Solver {
                 maxScore = Math.max(maxScore, data.probabilities[row][col])
             }
         }
+
         let probabilities = []
+        let bestCell = data.bestCell
         for (let row = 0; row < data.probabilities.length; row++) {
             let newRow = []
             for (let col = 0; col < data.probabilities[row].length; col++) {
                 let score = data.probabilities[row][col]
                 let percent = (Math.round(((score/totalScore) + Number.EPSILON) * 10000) / 100)
+
+                if (row == data.bestCell.coordinates[0] && col == data.bestCell.coordinates[1]) {
+                    bestCell["weight"] = score;
+                    bestCell["percent"] = percent;
+                }
 
                 newRow.push({score: data.probabilities[row][col], percent: percent})
             }
@@ -122,7 +129,7 @@ class Solver {
         this.probabilities = probabilities;
         this.minScore = minScore;
         this.maxScore = maxScore;
-        this.bestCell = data.bestCell;
+        this.bestCell = bestCell;
         this.errors = data.errors;
     }
 
