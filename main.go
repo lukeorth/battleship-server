@@ -61,7 +61,7 @@ func main() {
     }
     port := os.Getenv("LISTEN_PORT")
     if port == "" {
-        port = "8080"
+        port = "8850"
     }
     mux := http.NewServeMux()
     handler := &battleshipHandler{}
